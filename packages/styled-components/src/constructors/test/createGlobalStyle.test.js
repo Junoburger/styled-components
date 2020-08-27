@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactDOMServer from 'react-dom/server';
-import { Simulate, act } from 'react-dom/test-utils';
+import { Simulate } from 'react-dom/test-utils';
 
 import {
   expectCSSMatches,
@@ -219,15 +219,15 @@ describe(`createGlobalStyle`, () => {
 
     const renderer = ReactTestRenderer.create(<Comp insert />);
 
-    act(() => {
+    ReactTestRenderer.act(() => {
       expect(getCSS(document).trim()).toContain(`[data-test-remove]{color:grey;}`);
       expect(getCSS(document).trim()).not.toContain(`[data-test-keep]{color:blue;}`);
       renderer.update(<Comp insert={false} />);
+    });
 
-      act(() => {
-        expect(getCSS(document).trim()).not.toContain(`[data-test-remove]{color:grey;}`);
-        expect(getCSS(document).trim()).toContain(`[data-test-keep]{color:blue;}`);
-      });
+    ReactTestRenderer.act(() => {
+      expect(getCSS(document).trim()).not.toContain(`[data-test-remove]{color:grey;}`);
+      expect(getCSS(document).trim()).toContain(`[data-test-keep]{color:blue;}`);
     });
   });
 

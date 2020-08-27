@@ -29,10 +29,10 @@
   },
   "devDependencies": {
     "babel-loader": "^8.0.6",
-    "babel-plugin-react-native-web": "^0.11.4",
+    "babel-plugin-react-native-web": "^0.13.9",
     "css-loader": "^2.1.1",
-    "merge-anything": "^2.2.5",
     "memoize-one": "^5.0.4",
+    "merge-anything": "^2.2.5",
     "style-loader": "^0.23.1",
     "webpack": "^4.33.0",
     "webpack-bundle-analyzer": "^3.3.2",
