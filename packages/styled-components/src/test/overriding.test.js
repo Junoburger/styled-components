@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { resetStyled, expectCSSMatches } from './utils';
+import { resetStyled, getRenderedCSS } from './utils';
 
 // Disable isStaticRules optimisation since we're not
 // testing for ComponentStyle specifics here
@@ -30,10 +30,13 @@ describe('extending', () => {
     `;
     TestRenderer.create(<Inner />);
     TestRenderer.create(<Outer />);
-    expectCSSMatches(`
-      .c { color:blue; font-weight:light; }
-      .d { padding:1rem; }
-      .d > .sc-a { font-weight:bold; }
+
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .c{ color:blue; font-weight:light; }
+      .d{ padding:1rem; }
+      .d >.sc-a{ font-weight:bold; }
+      "
     `);
   });
 
@@ -54,10 +57,12 @@ describe('extending', () => {
 
     const tree = TestRenderer.create(<Outer />);
 
-    expectCSSMatches(`
-      .c { color:blue; }
-      .sc-a + .sc-a { color:green; }
-      .d { padding:1rem; }
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .c{ color:blue; }
+      .sc-a+.sc-a{ color:green; }
+      .d{ padding:1rem; }
+      "
     `);
 
     // ensure both static classes are applied and dynamic classes are also present
@@ -102,10 +107,13 @@ describe('extending', () => {
       TestRenderer.create(<Parent />);
       TestRenderer.create(<Child />);
       TestRenderer.create(<Grandson />);
-      expectCSSMatches(`
+
+      expect(getRenderedCSS()).toMatchInlineSnapshot(`
+        "
         .d{ position:relative; color:red; }
         .e{ position:relative; color:blue; }
         .f{ position:relative; color:green; }
+        "
       `);
     });
 
@@ -118,10 +126,13 @@ describe('extending', () => {
         TestRenderer.create(<Parent />);
         TestRenderer.create(<Child />);
         TestRenderer.create(<Grandson />);
-        expectCSSMatches(`
+
+        expect(getRenderedCSS()).toMatchInlineSnapshot(`
+          "
           .d{ position:relative; color:red; }
           .e{ position:relative; color:blue; }
           .f{ position:relative; color:green; }
+          "
         `);
       });
 
@@ -150,9 +161,12 @@ describe('extending', () => {
             color="primary"
           />
         `);
-        expectCSSMatches(`
+
+        expect(getRenderedCSS()).toMatchInlineSnapshot(`
+          "
           .d{ position:relative; color:red; }
           .e{ position:relative; color:blue; }
+          "
         `);
       });
     });

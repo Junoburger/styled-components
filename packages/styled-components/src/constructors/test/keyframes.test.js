@@ -165,7 +165,7 @@ describe('keyframes', () => {
         );
       } else {
         return css`
-          ${animation === 'slide' ? slideAnimation : opacityAnimation} 1s linear;
+          ${animation === 'slide' ? slideAnimation : opacityAnimation} 1s linear
         `;
       }
     };
@@ -186,7 +186,7 @@ describe('keyframes', () => {
     TestRenderer.create(<App />);
 
     expect(getCSS(document).trim()).toMatchInlineSnapshot(
-      `".a{-webkit-animation:none;animation:none;}.b{-webkit-animation:cMaiLV 1s linear;animation:cMaiLV 1s linear;, itcuFx 1s linear;}.c{-webkit-animation:itcuFx 1s linear;animation:itcuFx 1s linear;}.d{-webkit-animation:cMaiLV 1s linear;animation:cMaiLV 1s linear;}@-webkit-keyframes cMaiLV{from{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px);}to{-webkit-transform:none;-ms-transform:none;transform:none;}}@keyframes cMaiLV{from{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px);}to{-webkit-transform:none;-ms-transform:none;transform:none;}}@-webkit-keyframes itcuFx{from{opacity:0;}to{opacity:1;}}@keyframes itcuFx{from{opacity:0;}to{opacity:1;}}"`
+      `".a{-webkit-animation:none;animation:none;}.b{-webkit-animation:cMaiLV 1s linear,itcuFx 1s linear;animation:cMaiLV 1s linear,itcuFx 1s linear;}.c{-webkit-animation:itcuFx 1s linear;animation:itcuFx 1s linear;}.d{-webkit-animation:cMaiLV 1s linear;animation:cMaiLV 1s linear;}@-webkit-keyframes cMaiLV{from{-webkit-transform:translateX(-10px);-moz-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px);}to{-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;}}@keyframes cMaiLV{from{-webkit-transform:translateX(-10px);-moz-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px);}to{-webkit-transform:none;-moz-transform:none;-ms-transform:none;transform:none;}}@-webkit-keyframes itcuFx{from{opacity:0;}to{opacity:1;}}@keyframes itcuFx{from{opacity:0;}to{opacity:1;}}"`
     );
   });
 
@@ -221,12 +221,8 @@ describe('keyframes', () => {
 
     expect(getRenderedCSS()).toMatchInlineSnapshot(`
       ".a{ -webkit-animation:dpYZkx-1567285458 2s linear infinite; animation:dpYZkx-1567285458 2s linear infinite; }
-      @-webkit-keyframes dpYZkx-1567285458{ 0%{ right:0%; }
-      100%{ right:100%; }
-      }
-      @keyframes dpYZkx-1567285458{ 0%{ right:0%; }
-      100%{ right:100%; }
-      }
+      @-webkit-keyframes dpYZkx-1567285458{ 0%{ right:0%; } 100%{ right:100%; } }
+      @keyframes dpYZkx-1567285458{ 0%{ right:0%; } 100%{ right:100%; } }
       "
     `);
   });

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { renderIntoDocument } from 'react-dom/test-utils';
 import TestRenderer from 'react-test-renderer';
 
-import { resetStyled, expectCSSMatches } from './utils';
+import { resetStyled, getRenderedCSS } from './utils';
 import ThemeProvider from '../models/ThemeProvider';
 import withTheme from '../hoc/withTheme';
 
@@ -25,7 +25,11 @@ describe('theming', () => {
         <Comp />
       </ThemeProvider>
     );
-    expectCSSMatches(`.b { color:${theme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:black; }
+      "
+    `);
   });
 
   it('should inject props.theme into a styled component multiple levels deep', () => {
@@ -42,7 +46,11 @@ describe('theming', () => {
         </div>
       </ThemeProvider>
     );
-    expectCSSMatches(`.b { color:${theme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:black; }
+      "
+    `);
   });
 
   it('should properly allow a component to fallback to its default props when a theme is not provided', () => {
@@ -62,7 +70,11 @@ describe('theming', () => {
         <Comp1 />
       </div>
     );
-    expectCSSMatches(`.b { color:purple; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; }
+      "
+    `);
   });
 
   // https://github.com/styled-components/styled-components/issues/344
@@ -85,7 +97,11 @@ describe('theming', () => {
         <Comp1 />
       </ThemeProvider>
     );
-    expectCSSMatches(`.b { color:green; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:green; }
+      "
+    `);
   });
 
   it('should properly allow a component to override the theme with a prop even if it is equal to defaultProps theme', () => {
@@ -107,7 +123,11 @@ describe('theming', () => {
         <Comp1 theme={{ test: { color: 'purple' } }} />
       </ThemeProvider>
     );
-    expectCSSMatches(`.b { color:purple; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; }
+      "
+    `);
   });
 
   it('should properly allow a component to override the theme with a prop', () => {
@@ -126,7 +146,11 @@ describe('theming', () => {
         </ThemeProvider>
       </div>
     );
-    expectCSSMatches(`.b { color:red; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:red; }
+      "
+    `);
   });
 
   it('should only inject props.theme into styled components within its child component tree', () => {
@@ -148,7 +172,12 @@ describe('theming', () => {
         <Comp2 />
       </div>
     );
-    expectCSSMatches(`.c { color:${theme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .c{ color:black; }
+      .d{ background:; }
+      "
+    `);
   });
 
   it('should inject props.theme into all styled components within the child component tree', () => {
@@ -169,7 +198,12 @@ describe('theming', () => {
         </div>
       </ThemeProvider>
     );
-    expectCSSMatches(`.c { color:${theme.color}; } .d { background:${theme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .c{ color:black; }
+      .d{ background:black; }
+      "
+    `);
   });
 
   it('should inject new CSS when the theme changes', () => {
@@ -188,11 +222,20 @@ describe('theming', () => {
       );
     };
     renderComp();
-    const initialCSS = expectCSSMatches(`.b { color:${theme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:black; }
+      "
+    `);
     // Change the theme
     theme = newTheme;
     renderComp();
-    expectCSSMatches(`${initialCSS} .c { color:${newTheme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:black; }
+      .c{ color:blue; }
+      "
+    `);
   });
 
   it('should properly render with the same theme from default props on re-render', () => {
@@ -209,10 +252,18 @@ describe('theming', () => {
     const jsx = <Comp1 />;
 
     const wrapper = TestRenderer.create(jsx);
-    expectCSSMatches(`.b { color:purple; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; }
+      "
+    `);
 
     wrapper.update(jsx);
-    expectCSSMatches(`.b { color:purple; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; }
+      "
+    `);
   });
 
   it('should properly update style if theme is changed', () => {
@@ -229,7 +280,11 @@ describe('theming', () => {
         <Comp1 />
       </ThemeProvider>
     );
-    expectCSSMatches(`.b { color:purple; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; }
+      "
+    `);
 
     wrapper.update(
       <ThemeProvider
@@ -240,7 +295,12 @@ describe('theming', () => {
         <Comp1 />
       </ThemeProvider>
     );
-    expectCSSMatches(`.b { color:purple; } .c { color:pink; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; }
+      .c{ color:pink; }
+      "
+    `);
   });
 
   it('should properly update style if props used in styles is changed', () => {
@@ -262,8 +322,12 @@ describe('theming', () => {
         <Comp1 />
       </ThemeProvider>
     );
-    let expectedStyles = `.b { color:purple; z-index:0px; }`;
-    expectCSSMatches(expectedStyles);
+
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; z-index:0px; }
+      "
+    `);
 
     wrapper.update(
       <ThemeProvider
@@ -274,8 +338,13 @@ describe('theming', () => {
         <Comp1 />
       </ThemeProvider>
     );
-    expectedStyles = `${expectedStyles} .c { color:pink; z-index:0px; }`;
-    expectCSSMatches(expectedStyles);
+
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; z-index:0px; }
+      .c{ color:pink; z-index:0px; }
+      "
+    `);
 
     Comp1.defaultProps.zIndex = 1;
     wrapper.update(
@@ -287,7 +356,13 @@ describe('theming', () => {
         <Comp1 />
       </ThemeProvider>
     );
-    expectCSSMatches(`${expectedStyles} .d { color:pink; z-index:1px; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:purple; z-index:0px; }
+      .c{ color:pink; z-index:0px; }
+      .d{ color:pink; z-index:1px; }
+      "
+    `);
   });
 
   it('should change the classnames when the theme changes', () => {
@@ -306,13 +381,22 @@ describe('theming', () => {
 
     const wrapper = TestRenderer.create(<Theme theme={originalTheme} />);
 
-    expectCSSMatches(`.b { color:${originalTheme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:black; }
+      "
+    `);
     expect(wrapper.root.findByType('div').props.className).toBe('sc-a b');
 
     // Change theme
     wrapper.update(Theme({ theme: newTheme }));
 
-    expectCSSMatches(`.b { color:${originalTheme.color}; } .c { color:${newTheme.color}; }`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:black; }
+      .c{ color:blue; }
+      "
+    `);
 
     expect(wrapper.root.findByType('div').props.className).toBe('sc-a c');
   });
@@ -373,10 +457,18 @@ describe('theming', () => {
     );
 
     const wrapper = TestRenderer.create(<Theme key="a" prop="foo" />);
-    expectCSSMatches('.b { color:green; } ');
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:green; }
+      "
+    `);
 
     wrapper.update(<Theme key="a" prop="bar" />);
-    expectCSSMatches('.b { color:green; } ');
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ color:green; }
+      "
+    `);
   });
 
   // https://github.com/styled-components/styled-components/issues/596
@@ -437,6 +529,7 @@ describe('theming', () => {
     const theme = { color: 'red' };
     const newTheme = { color: 'blue' };
 
+    // eslint-disable-next-line no-console
     const consoleWarn = console.warn;
 
     jest
@@ -491,7 +584,11 @@ describe('theming', () => {
       );
     }).not.toThrow('plain object');
 
-    expectCSSMatches(`.b {background-color:${theme.palette.white};color:${theme.palette.black};}`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ background-color:#fff; color:#000; }
+      "
+    `);
   });
 
   it('should allow other complex objects to be passed as themes', () => {
@@ -515,7 +612,11 @@ describe('theming', () => {
       </ThemeProvider>
     );
 
-    expectCSSMatches(`.b {border-radius:${theme.borderRadius};}`);
+    expect(getRenderedCSS()).toMatchInlineSnapshot(`
+      "
+      .b{ border-radius:2px; }
+      "
+    `);
   });
 
   it('should not allow the theme to be null', () => {

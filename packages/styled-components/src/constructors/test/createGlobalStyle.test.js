@@ -219,15 +219,15 @@ describe(`createGlobalStyle`, () => {
 
     const renderer = ReactTestRenderer.create(<Comp insert />);
 
-    act(() => {
+    ReactTestRenderer.act(() => {
       expect(getCSS(document).trim()).toContain(`[data-test-remove]{color:grey;}`);
       expect(getCSS(document).trim()).not.toContain(`[data-test-keep]{color:blue;}`);
       renderer.update(<Comp insert={false} />);
+    });
 
-      act(() => {
-        expect(getCSS(document).trim()).not.toContain(`[data-test-remove]{color:grey;}`);
-        expect(getCSS(document).trim()).toContain(`[data-test-keep]{color:blue;}`);
-      });
+    ReactTestRenderer.act(() => {
+      expect(getCSS(document).trim()).not.toContain(`[data-test-remove]{color:grey;}`);
+      expect(getCSS(document).trim()).toContain(`[data-test-keep]{color:blue;}`);
     });
   });
 
@@ -301,7 +301,7 @@ describe(`createGlobalStyle`, () => {
     expect(getCSS(document).trim()).toMatchInlineSnapshot(`"body{background:red;}"`);
 
     render(<A />);
-    expect(getCSS(document).trim()).toMatchInlineSnapshot(`""`);
+    expect(getCSS(document).trim()).toMatchInlineSnapshot(`"body{background:;}"`);
   });
 
   it(`should warn when children are passed as props`, () => {
@@ -369,7 +369,7 @@ describe(`createGlobalStyle`, () => {
     );
 
     expect(getCSS(document).trim()).toMatchInlineSnapshot(
-      `"div{display:inline-block;-webkit-animation:a 2s linear infinite;animation:a 2s linear infinite;padding:2rem 1rem;font-size:1.2rem;}@-webkit-keyframes a{from{-webkit-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}to{-webkit-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}@keyframes a{from{-webkit-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}to{-webkit-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}"`
+      `"div{display:inline-block;-webkit-animation:a 2s linear infinite;animation:a 2s linear infinite;padding:2rem 1rem;font-size:1.2rem;}@-webkit-keyframes a{from{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}to{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}@keyframes a{from{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}to{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}"`
     );
   });
 

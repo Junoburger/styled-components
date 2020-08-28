@@ -92,28 +92,29 @@ describe('with styles', () => {
       </React.Fragment>
     );
     expect(getRenderedCSS()).toMatchInlineSnapshot(`
-      ".b{ background:red; color:white; }
+      "
+      .b{ background:red; color:white; }
       .b.b.b{ border:1px solid red; }
       .b[disabled]{ color:red; }
-      .b[disabled] + .sc-a[disabled]{ margin-bottom:4px; }
-      .b[disabled] > .sc-a[disabled]{ margin-top:4px; }
-      .sc-a + .sc-a{ margin-left:4px; }
-      .sc-a + .sc-a ~ .sc-a{ background:black; }
-      .sc-a ~ .sc-a{ margin-right:4px; }
-      .sc-a > .sc-a{ margin-top:4px; }
+      .b[disabled]+.sc-a[disabled]{ margin-bottom:4px; }
+      .b[disabled]>.sc-a[disabled]{ margin-top:4px; }
+      .sc-a+.sc-a{ margin-left:4px; }
+      .sc-a+.sc-a~.sc-a{ background:black; }
+      .sc-a~.sc-a{ margin-right:4px; }
+      .sc-a>.sc-a{ margin-top:4px; }
       .foo .sc-a{ color:silver; }
-      .foo > .sc-a{ color:green; }
+      .foo>.sc-a{ color:green; }
       .c{ background:red; color:red; }
       .c.c.c{ border:1px solid red; }
       .c[disabled]{ color:red; }
-      .c[disabled] + .sc-a[disabled]{ margin-bottom:4px; }
-      .c[disabled] > .sc-a[disabled]{ margin-top:4px; }
-      .sc-a + .sc-a{ margin-left:4px; }
-      .sc-a + .sc-a ~ .sc-a{ background:black; }
-      .sc-a ~ .sc-a{ margin-right:4px; }
-      .sc-a > .sc-a{ margin-top:4px; }
+      .c[disabled]+.sc-a[disabled]{ margin-bottom:4px; }
+      .c[disabled]>.sc-a[disabled]{ margin-top:4px; }
+      .sc-a+.sc-a{ margin-left:4px; }
+      .sc-a+.sc-a~.sc-a{ background:black; }
+      .sc-a~.sc-a{ margin-right:4px; }
+      .sc-a>.sc-a{ margin-top:4px; }
       .foo .sc-a{ color:silver; }
-      .foo > .sc-a{ color:green; }
+      .foo>.sc-a{ color:green; }
       "
     `);
   });
@@ -184,7 +185,7 @@ describe('with styles', () => {
       ${rule1};
     `;
     TestRenderer.create(<Comp />);
-    expectCSSMatches('.b { background-color:blue; } .b > h1 { color:white; }');
+    expectCSSMatches('.b { background-color:blue; } .b >h1 { color:white; }');
   });
 
   it('should handle inline style objects with contextual selectors', () => {

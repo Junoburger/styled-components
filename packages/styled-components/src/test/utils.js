@@ -79,7 +79,6 @@ export const expectCSSMatches = (
 };
 
 export const getRenderedCSS = (
-  _expectation: string,
   opts: { ignoreWhitespace: boolean } = { ignoreWhitespace: true }
 ) => {
   let css = getCSS(document);
@@ -89,5 +88,5 @@ export const getRenderedCSS = (
   }
 
   // make the individual lines easier to read
-  return css.replace(/} /g, '}\n');
+  return css ? '\n' + css.replace(/(} )*} /g, '$1}\n') : '';
 };
